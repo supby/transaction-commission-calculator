@@ -13,7 +13,7 @@ export class ExchangeService {
         const conversionRate = rates[from];
 
         if (!conversionRate) {
-            throw new Error('Destination currency is not found.')
+            throw new Error('Destination currency is not found.');
         }
 
         return amount / conversionRate;

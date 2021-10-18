@@ -1,4 +1,4 @@
-export type TransactionDto = {
+export type Transaction = {
   readonly date: string,
   readonly amount: number,  
   readonly currency: string,
