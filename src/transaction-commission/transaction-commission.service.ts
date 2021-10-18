@@ -18,7 +18,7 @@ export class TransactionCommissionService {
   async addTransaction(transaction: TransactionDto): Promise<CommissionDto> {
     let amount = transaction.amount;
     if (transaction.currency !== TransactionCommissionService.BASE_CURRENCY) {
-      amount = await this.exchangeService.convert(transaction.currency, TransactionCommissionService.BASE_CURRENCY, amount)
+      amount = await this.exchangeService.convert(transaction.currency, TransactionCommissionService.BASE_CURRENCY, amount, new Date(transaction.date))
     }
     
     this.repositoryService.storeTransaction(transaction);
@@ -27,6 +27,6 @@ export class TransactionCommissionService {
 
     // TODO: calculate commission based on rules and stored transactions
 
-    return new CommissionDto(transaction.amount, transaction.currency);
+    return new CommissionDto(amount, transaction.currency);
   }
 }
