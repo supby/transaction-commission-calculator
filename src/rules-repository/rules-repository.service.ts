@@ -18,10 +18,9 @@ export class RulesRepositoryService {
             new Rule(
                 { transactionRepositoryService: this.transactionRepositoryService },
                 (tr, ctx) => {
-                    // TODO: from requirement it is not clear 1 month from now(request) or transaction date but idea is clear.
-                    const monthAgoDate = subMonths(new Date(), 1)
+                    const monthAgoDate = subMonths(tr.date, 1)
                     const usersTransaction = 
-                        ctx.transactionRepositoryService.getTransactions(t => t.clientId === tr.clientId && t.date >= monthAgoDate);
+                        ctx.transactionRepositoryService.getTransactions(t => t.clientId === tr.clientId && t.date >= monthAgoDate && t.date <= tr.date);
 
                     return usersTransaction.reduce((acc, t) => acc += t.amount, 0) >= 1000;
                 }, 

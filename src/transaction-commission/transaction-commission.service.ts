@@ -30,8 +30,6 @@ export class TransactionCommissionService {
 
     const baseTransaction = new BaseTransation(transactionDate, amount, transactionDto.client_id);
     
-    this.transactionRepositoryService.storeTransaction(baseTransaction);
-    
     const commissionsToApply = this.rulesRepositoryService
         .getRules()
         .filter(r => r.IsApplicable(baseTransaction))
@@ -41,6 +39,8 @@ export class TransactionCommissionService {
     if (!commissionsToApply || commissionsToApply.length === 0) {
       throw new Error('No Rules found. Should be at least 1.');
     }
+
+    this.transactionRepositoryService.storeTransaction(baseTransaction);
 
     return new Commission(commissionsToApply[0], this.baseCurrency);
   }
