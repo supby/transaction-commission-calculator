@@ -9,6 +9,15 @@ import { HttpModule } from '@nestjs/axios';
 @Module({
   imports: [HttpModule],
   controllers: [TransactionCommissionController],
-  providers: [TransactionCommissionService, ExchangeService, TransactionRepositoryService, RulesRepositoryService]
+  providers: [
+    TransactionCommissionService, 
+    ExchangeService, 
+    TransactionRepositoryService, 
+    RulesRepositoryService,
+    {
+      provide: 'BASE_CURRENCY',
+      useValue: 'EUR',
+    }
+  ]
 })
 export class TransactionCommissionModule {}

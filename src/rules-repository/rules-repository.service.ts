@@ -8,7 +8,7 @@ const ruleStorage: Rule[] = [
         getCommission: (tr) => Math.max(0.05, tr.amount * 0.005)
     },
     {
-        predicate: (tr) => tr.client_id === 42,
+        predicate: (tr) => tr.clientId === 42,
         getCommission: (tr) => 0.05
     },
 ]

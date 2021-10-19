@@ -1,42 +1,45 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Commission } from './dto/commission';
 import { TransactionDto } from './dto/transaction';
 import { ExchangeService } from 'src/exchange/exchange.service';
 import { TransactionRepositoryService } from 'src/transaction-repository/transaction-repository.service';
 import { RulesRepositoryService } from 'src/rules-repository/rules-repository.service';
+import { BaseTransation } from './types/baseTransaction';
 
 @Injectable()
 export class TransactionCommissionService {
-  private static BASE_CURRENCY = "EUR";
-
   constructor(
+    @Inject('BASE_CURRENCY') private readonly baseCurrency: string,
     private readonly exchangeService: ExchangeService,
     private readonly transactionRepositoryService: TransactionRepositoryService,
     private readonly rulesRepositoryService: RulesRepositoryService
   ) { }
 
-  async addTransaction(transaction: TransactionDto): Promise<Commission> {
-    let amount = transaction.amount;
-    if (transaction.currency !== TransactionCommissionService.BASE_CURRENCY) {
+  async addTransaction(transactionDto: TransactionDto): Promise<Commission> {
+    let amount = transactionDto.amount;
+    const transactionDate = new Date(transactionDto.date);
+    if (transactionDto.currency !== this.baseCurrency) {
       amount = await this.exchangeService.convert(
-          transaction.currency, 
-          TransactionCommissionService.BASE_CURRENCY, 
+          transactionDto.currency, 
+          this.baseCurrency,
           amount, 
-          new Date(transaction.date));
+          transactionDate);
     }
+
+    const baseTransaction = new BaseTransation(transactionDate, amount, transactionDto.client_id);
     
-    this.transactionRepositoryService.storeTransaction(transaction);
+    this.transactionRepositoryService.storeTransaction(baseTransaction);
     
     const commissionsToApply = this.rulesRepositoryService
         .getRules()
-        .filter(r => r.predicate(transaction))
-        .map(r => r.getCommission(transaction))
+        .filter(r => r.predicate(baseTransaction))
+        .map(r => r.getCommission(baseTransaction))
         .sort((a,b) => a - b);
 
     if (!commissionsToApply || commissionsToApply.length === 0) {
-      throw new Error('No Rules found. Should at least 1.');
+      throw new Error('No Rules found. Should be at least 1.');
     }
 
-    return new Commission(commissionsToApply[0], TransactionCommissionService.BASE_CURRENCY);
+    return new Commission(commissionsToApply[0], this.baseCurrency);
   }
 }
