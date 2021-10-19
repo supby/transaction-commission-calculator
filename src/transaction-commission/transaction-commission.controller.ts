@@ -1,13 +1,14 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { TransactionCommissionService } from './transaction-commission.service';
-import { Transaction } from './types/transaction';
+import { TransactionDto } from './dto/transaction';
 
 @Controller('transaction-commission')
 export class TransactionCommissionController {
   constructor(private readonly transactionCommissionService: TransactionCommissionService) {}
 
   @Post()
-  addTransaction(@Body() createTransactionCommissionDto: Transaction) {
+  addTransaction(@Body() createTransactionCommissionDto: TransactionDto) {
+    
     return this.transactionCommissionService.addTransaction(createTransactionCommissionDto);
   }
 }

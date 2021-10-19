@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Transaction } from 'src/transaction-commission/types/transaction';
+import { TransactionDto } from 'src/transaction-commission/dto/transaction';
 
 // TODO: test in-memory storage
-const storage: Transaction[] = []
+const storage: TransactionDto[] = []
 
 @Injectable()
 export class TransactionRepositoryService {
-    storeTransaction(transaction: Transaction) {
+    storeTransaction(transaction: TransactionDto) {
         storage.push(transaction);
     }
 }

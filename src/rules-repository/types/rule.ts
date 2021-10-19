@@ -1,4 +1,4 @@
-import { Transaction } from "src/transaction-commission/types/transaction";
+import { TransactionDto } from "src/transaction-commission/dto/transaction";
 
 // export class Rule {
     
@@ -11,6 +11,6 @@ import { Transaction } from "src/transaction-commission/types/transaction";
 // }
 
 export type Rule = {
-    predicate: (transaction: Transaction) => boolean;
-    getCommission: (transaction: Transaction) => number;
+    predicate: (transaction: TransactionDto) => boolean;
+    getCommission: (transaction: TransactionDto) => number;
 }

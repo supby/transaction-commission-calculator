@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Commission } from './types/commission';
-import { Transaction } from './types/transaction';
+import { Commission } from './dto/commission';
+import { TransactionDto } from './dto/transaction';
 import { ExchangeService } from 'src/exchange/exchange.service';
 import { TransactionRepositoryService } from 'src/transaction-repository/transaction-repository.service';
 import { RulesRepositoryService } from 'src/rules-repository/rules-repository.service';
@@ -15,7 +15,7 @@ export class TransactionCommissionService {
     private readonly rulesRepositoryService: RulesRepositoryService
   ) { }
 
-  async addTransaction(transaction: Transaction): Promise<Commission> {
+  async addTransaction(transaction: TransactionDto): Promise<Commission> {
     let amount = transaction.amount;
     if (transaction.currency !== TransactionCommissionService.BASE_CURRENCY) {
       amount = await this.exchangeService.convert(
