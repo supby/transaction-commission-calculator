@@ -9,4 +9,8 @@ export class TransactionRepositoryService {
     storeTransaction(transaction: BaseTransation) {
         storage.push(transaction);
     }
+
+    getTransactions(predicate: (transaction: BaseTransation) => boolean) {
+        return storage.filter(predicate);
+    }
 }

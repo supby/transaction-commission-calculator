@@ -5,6 +5,7 @@ import { ExchangeService } from 'src/exchange/exchange.service';
 import { TransactionRepositoryService } from 'src/transaction-repository/transaction-repository.service';
 import { RulesRepositoryService } from 'src/rules-repository/rules-repository.service';
 import { BaseTransation } from './types/baseTransaction';
+import { tr } from 'date-fns/locale';
 
 @Injectable()
 export class TransactionCommissionService {
@@ -16,11 +17,12 @@ export class TransactionCommissionService {
   ) { }
 
   async addTransaction(transactionDto: TransactionDto): Promise<Commission> {
-    let amount = transactionDto.amount;
+    // TODO: consider here possible Big number
+    let amount = parseFloat(transactionDto.amount);
     const transactionDate = new Date(transactionDto.date);
     if (transactionDto.currency !== this.baseCurrency) {
       amount = await this.exchangeService.convert(
-          transactionDto.currency, 
+          transactionDto.currency,
           this.baseCurrency,
           amount, 
           transactionDate);
@@ -32,8 +34,8 @@ export class TransactionCommissionService {
     
     const commissionsToApply = this.rulesRepositoryService
         .getRules()
-        .filter(r => r.predicate(baseTransaction))
-        .map(r => r.getCommission(baseTransaction))
+        .filter(r => r.IsApplicable(baseTransaction))
+        .map(r => r.GetCommission(baseTransaction))
         .sort((a,b) => a - b);
 
     if (!commissionsToApply || commissionsToApply.length === 0) {

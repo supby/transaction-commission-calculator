@@ -1,4 +1,4 @@
-import { IsDateString, IsInt, IsNotEmpty, IsNumberString } from "class-validator"
+import { IsDateString, IsInt, IsNotEmpty, IsNumber, IsNumberString } from "class-validator"
 
 export class TransactionDto {
   
@@ -8,7 +8,7 @@ export class TransactionDto {
 
   @IsNumberString()
   @IsNotEmpty()
-  readonly amount: number
+  readonly amount: string
 
   @IsNotEmpty()
   readonly currency: string
