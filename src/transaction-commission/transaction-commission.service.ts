@@ -4,7 +4,7 @@ import { TransactionDto } from './dto/transaction';
 import { ExchangeService } from 'src/exchange/exchange.service';
 import { TransactionRepositoryService } from 'src/transaction-repository/transaction-repository.service';
 import { RulesRepositoryService } from 'src/rules-repository/rules-repository.service';
-import { BaseTransation } from './types/baseTransaction';
+import { BaseTransaction } from './types/baseTransaction';
 import { tr } from 'date-fns/locale';
 import { Rule } from 'src/rules-repository/types/rule';
 
@@ -17,7 +17,7 @@ export class TransactionCommissionService {
     private readonly rulesRepositoryService: RulesRepositoryService
   ) { }
 
-  async addTransaction(transactionDto: TransactionDto): Promise<Commission> {
+  async processTransaction(transactionDto: TransactionDto): Promise<Commission> {
     // TODO: consider here possible Big number
     let amount = parseFloat(transactionDto.amount);
     const transactionDate = new Date(transactionDto.date);
@@ -29,7 +29,7 @@ export class TransactionCommissionService {
           transactionDate);
     }
 
-    const baseTransaction = new BaseTransation(transactionDate, amount, transactionDto.client_id);    
+    const baseTransaction = new BaseTransaction(transactionDate, amount, transactionDto.client_id);    
     const applicableRules = await this.rulesRepositoryService.getRules((r: Rule) => r.IsApplicable(baseTransaction));
     const commissionsToApply = await Promise.all(applicableRules.map(r => r.GetCommission(baseTransaction)));
     

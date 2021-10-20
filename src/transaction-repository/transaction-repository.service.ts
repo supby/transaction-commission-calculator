@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { BaseTransation } from 'src/transaction-commission/types/baseTransaction';
+import { BaseTransaction } from 'src/transaction-commission/types/baseTransaction';
 
 // TODO: test in-memory storage
-const storage: BaseTransation[] = []
+const storage: BaseTransaction[] = []
 
 @Injectable()
 export class TransactionRepositoryService {
-    async storeTransaction(transaction: BaseTransation) {
+    async storeTransaction(transaction: BaseTransaction): Promise<boolean> {
         storage.push(transaction);
+
+        return true;
     }
 
-    async getTransactions(predicate: (transaction: BaseTransation) => boolean): Promise<BaseTransation[]> {
+    async getTransactions(predicate: (transaction: BaseTransaction) => boolean): Promise<BaseTransaction[]> {
         return storage.filter(predicate);
     }
 }

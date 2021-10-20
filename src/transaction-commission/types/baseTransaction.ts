@@ -1,5 +1,5 @@
 // Base transaction in base currency
-export class BaseTransation {
+export class BaseTransaction {
     constructor(
         readonly date: Date,
         readonly amount: number,

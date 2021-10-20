@@ -9,6 +9,6 @@ export class TransactionCommissionController {
   @Post()
   addTransaction(@Body() createTransactionCommissionDto: TransactionDto) {
     
-    return this.transactionCommissionService.addTransaction(createTransactionCommissionDto);
+    return this.transactionCommissionService.processTransaction(createTransactionCommissionDto);
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { subMonths } from 'date-fns';
-import { BaseTransation } from 'src/transaction-commission/types/baseTransaction';
+import { BaseTransaction } from 'src/transaction-commission/types/baseTransaction';
 import { TransactionRepositoryService } from 'src/transaction-repository/transaction-repository.service';
 import { Rule } from './types/rule';
 
