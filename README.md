@@ -1,3 +1,3 @@
 # Transaction commission calculator API
 
-5h
+7h
