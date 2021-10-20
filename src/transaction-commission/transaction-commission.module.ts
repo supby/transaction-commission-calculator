@@ -15,6 +15,7 @@ import { HttpModule } from '@nestjs/axios';
     TransactionRepositoryService, 
     RulesRepositoryService,
     {
+      // TODO: the base currency is configurable. Might be loaded from config or DB.
       provide: 'BASE_CURRENCY',
       useValue: 'EUR',
     }

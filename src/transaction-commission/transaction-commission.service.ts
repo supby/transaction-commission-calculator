@@ -6,6 +6,7 @@ import { TransactionRepositoryService } from 'src/transaction-repository/transac
 import { RulesRepositoryService } from 'src/rules-repository/rules-repository.service';
 import { BaseTransation } from './types/baseTransaction';
 import { tr } from 'date-fns/locale';
+import { Rule } from 'src/rules-repository/types/rule';
 
 @Injectable()
 export class TransactionCommissionService {
@@ -28,13 +29,11 @@ export class TransactionCommissionService {
           transactionDate);
     }
 
-    const baseTransaction = new BaseTransation(transactionDate, amount, transactionDto.client_id);
+    const baseTransaction = new BaseTransation(transactionDate, amount, transactionDto.client_id);    
+    const applicableRules = await this.rulesRepositoryService.getRules((r: Rule) => r.IsApplicable(baseTransaction));
+    const commissionsToApply = await Promise.all(applicableRules.map(r => r.GetCommission(baseTransaction)));
     
-    const commissionsToApply = this.rulesRepositoryService
-        .getRules()
-        .filter(r => r.IsApplicable(baseTransaction))
-        .map(r => r.GetCommission(baseTransaction))
-        .sort((a,b) => a - b);
+    commissionsToApply.sort((a,b) => a - b);
 
     if (!commissionsToApply || commissionsToApply.length === 0) {
       throw new Error('No Rules found. Should be at least 1.');

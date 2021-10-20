@@ -6,11 +6,11 @@ const storage: BaseTransation[] = []
 
 @Injectable()
 export class TransactionRepositoryService {
-    storeTransaction(transaction: BaseTransation) {
+    async storeTransaction(transaction: BaseTransation) {
         storage.push(transaction);
     }
 
-    getTransactions(predicate: (transaction: BaseTransation) => boolean) {
+    async getTransactions(predicate: (transaction: BaseTransation) => boolean): Promise<BaseTransation[]> {
         return storage.filter(predicate);
     }
 }
