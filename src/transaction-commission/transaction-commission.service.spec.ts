@@ -73,7 +73,7 @@ describe('TransactionCommissionService', () => {
 
       const res = await sutService.processTransaction(inputTransaction);
 
-      expect(res.amount).toBe(0.5);
+      expect(res.amount).toBe("0.5");
       expect(exchangeService.convert).toHaveBeenCalledTimes(1);
       expect(exchangeService.convert).toHaveBeenCalledWith(
           inputTransaction.currency, 

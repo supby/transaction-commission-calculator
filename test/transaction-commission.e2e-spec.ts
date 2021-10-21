@@ -26,6 +26,6 @@ describe('TransactionCommissionController (e2e)', () => {
       })
       .expect('Content-Type', /json/)
       .expect(201)
-      .expect('{"amount":0.05,"currency":"EUR"}');
+      .expect('{"amount":"0.05","currency":"EUR"}');
   });
 });

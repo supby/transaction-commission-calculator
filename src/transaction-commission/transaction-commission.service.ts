@@ -41,6 +41,6 @@ export class TransactionCommissionService {
 
     this.transactionRepositoryService.storeTransaction(baseTransaction);
 
-    return new Commission(commissionsToApply[0], this.baseCurrency);
+    return new Commission(commissionsToApply[0].toString(), this.baseCurrency);
   }
 }
